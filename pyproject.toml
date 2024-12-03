@@ -1,0 +1,47 @@
+[tool.poetry]
+name = "poetry-demo"
+version = "0.1.0"
+description = ""
+authors = ["tomiban <tbanchio15@gmail.com>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.10"
+sqlalchemy = "^2.0.30"
+mysql-connector-python = "^8.4.0"
+flet = "^0.23.0"
+alembic = "^1.13.1"
+python-dotenv = "^1.0.1"
+fpdf = "^1.7.2"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8"        # Última versión mayor de pytest
+black = "^24"       # Última versión mayor de Black
+flake8 = "^7"        # Última versión mayor de Flake8
+isort = "^5.13"        # Última versión mayor de isort
+
+[tool.poetry.scripts]
+start = "punto_de_venta.main:main"
+migrate = "scripts.db:migrate"
+seed = "scripts.db:seed"
+test = "pytest tests/"
+format = "black ."
+lint = "flake8 ."
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
