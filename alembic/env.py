@@ -1,18 +1,25 @@
-from logging.config import fileConfig
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
-from alembic import context
 import os
-from dotenv import load_dotenv
+from logging.config import fileConfig
 
-# Cargar el archivo .env
-load_dotenv()
+from dotenv import load_dotenv
+from sqlalchemy import engine_from_config, pool
+
+from alembic import context
+
+# Determina el entorno y carga el archivo .env correspondiente
+environment = os.getenv(
+    "ENVIRONMENT", "development"
+)  # Default to 'development' if not set
+env_file = (
+    f".env.{environment}"  # Use the appropriate .env file based on the environment
+)
+load_dotenv(dotenv_path=env_file)  # Cargar el archivo .env correspondiente
 
 # Obtener las variables de entorno
-DB_USER = os.getenv('USER')
-DB_PASSWORD = os.getenv('PASSWORD')
-DB_HOST = os.getenv('HOST')
-DB_NAME = os.getenv('DATABASE_NAME')
+DB_USER = os.getenv("USER")
+DB_PASSWORD = os.getenv("PASSWORD")
+DB_HOST = os.getenv("HOST")
+DB_NAME = os.getenv("DATABASE_NAME")
 
 # Configurar la URL de la base de datos
 DATABASE_URL = f"mysql+mysqlconnector://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
@@ -26,22 +33,16 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# Añadir aquí el objeto MetaData de tu modelo para soporte de 'autogenerate'
-# Importa tus modelos aquí
-from database.models.base import Base  # Asegúrate de ajustar el import a tu estructura de proyecto
+# Importar los modelos aquí para autogenerar las migraciones
+from database.models.base import (  # Ajusta el import según tu estructura de proyecto
+    Base,
+)
+
 target_metadata = Base.metadata
 
+
 def run_migrations_offline() -> None:
-    """Ejecuta las migraciones en modo 'offline'.
-
-    Esto configura el contexto solo con una URL
-    y no con un Engine, aunque un Engine también es aceptable
-    aquí. Al omitir la creación del Engine
-    ni siquiera necesitamos que un DBAPI esté disponible.
-
-    Las llamadas a context.execute() aquí emiten la cadena dada a la
-    salida del script.
-    """
+    """Ejecuta las migraciones en modo 'offline'."""
     url = DATABASE_URL
     context.configure(
         url=url,
@@ -53,14 +54,11 @@ def run_migrations_offline() -> None:
     with context.begin_transaction():
         context.run_migrations()
 
-def run_migrations_online() -> None:
-    """Ejecuta las migraciones en modo 'online'.
 
-    En este escenario, necesitamos crear un Engine
-    y asociar una conexión con el contexto.
-    """
+def run_migrations_online() -> None:
+    """Ejecuta las migraciones en modo 'online'."""
     configuration = config.get_section(config.config_ini_section) or {}
-    configuration['sqlalchemy.url'] = DATABASE_URL
+    configuration["sqlalchemy.url"] = DATABASE_URL
     connectable = engine_from_config(
         configuration,
         prefix="sqlalchemy.",
@@ -76,6 +74,8 @@ def run_migrations_online() -> None:
         with context.begin_transaction():
             context.run_migrations()
 
+
+# Ejecutar las migraciones en el modo adecuado (offline o online)
 if context.is_offline_mode():
     run_migrations_offline()
 else:
