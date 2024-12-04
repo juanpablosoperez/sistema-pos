@@ -23,6 +23,7 @@ flake8 = "*"
 isort = "*"
 pre-commit = "*"
 commitizen = "*"
+poethepoet = "^0.31.1"
 
 [tool.isort]
 profile = "black"

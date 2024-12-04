@@ -195,19 +195,24 @@ DB_PASSWORD=password
 ## 📚 CLI Commands
 
 # Desarrollo
+```bash
 poetry run poe dev          # Ejecutar en desarrollo
 poetry run poe prod         # Ejecutar en producción
-
+```
 # Formateo y Linteo
+```bash
 poetry run poe format       # Formatea el codigo y acomoda los imports
 poetry run poe check        # Mismo que anterior pero hace un check del lint
-
+```
 # Git y Migraciones
+```bash
 poetry run poe commit       # Hacer commit
 poetry run poe db-migrate   # Actualizar migraciones
 poetry run poe db-rollback  # Revertir migración
 poetry run poe db-revision     # Nueva revisión de migración
 poetry run poe version      # Actualizar versión
-
+```
 # Limpieza
+```bash
 poetry run poe clean        # Limpiar archivos temporales
+```
