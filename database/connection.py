@@ -1,16 +1,19 @@
 # Variables de entorno
-from dotenv import load_dotenv
 import os
+from contextlib import contextmanager
+
+from dotenv import load_dotenv
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 load_dotenv()
-HOST = os.getenv('HOST')
-USER = os.getenv('USER')
-PASSWORD = os.getenv('PASSWORD')
-DATABASE_NAME = os.getenv('DATABASE_NAME')
+HOST = os.getenv("HOST")
+USER = os.getenv("USER")
+PASSWORD = os.getenv("PASSWORD")
+DATABASE_NAME = os.getenv("DATABASE_NAME")
+
 
 # SQLAlchemy
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy import create_engine
 
 DATABASE_URL = f"mysql+mysqlconnector://{USER}:{PASSWORD}@{HOST}/{DATABASE_NAME}"
 engine = create_engine(DATABASE_URL)  # Cambia echo a False en producción
@@ -27,14 +30,15 @@ engine = create_engine(DATABASE_URL)  # Cambia echo a False en producción
 # if os.getenv('ENV') != 'production':
 #     run_migrations()
 
+
 # Modelos y gestión del contexto de la base de datos
-from database.models import Base  # Asegúrate de que este import sea correcto
-from contextlib import contextmanager
+# from database.models import Base  # Asegúrate de que este import sea correcto
 
 # No llamamos a create_all, ya que las migraciones de Alembic deben manejar esto
 # Base.metadata.create_all(bind=engine)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
 
 @contextmanager
 def get_db():

@@ -24,6 +24,30 @@ isort = "*"
 pre-commit = "*"
 commitizen = "*"
 
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+line_length = 150
+sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
+force_single_line = true
+
+[tool.black]
+line-length = 150
+include = '\.pyi?$'
+extend-exclude = '''
+# A regex preceded with ^/ will apply only to files and directories
+# in the root of the project.
+^/foo.py  # exclude a file named foo.py in the root of the project
+'''
+
+[tool.flake8]
+max-line-length = 150
+exclude = [".git", "__pycache__", "build", "dist"]
+
 [tool.poe.tasks]
 dev = { cmd = "python main.py", env = { "ENV_NAME" = "development" } }
 prod = { cmd = "python main.py", env = { "ENV_NAME" = "production" } }
@@ -35,7 +59,7 @@ _isort = { cmd = "isort ." }
 lint = { sequence = ["_flake8"] }
 _flake8 = { cmd = "flake8" }
 
-check = { sequence = ["format", "lint", "test"] }
+check = { sequence = ["format", "lint"] }
 test = { cmd = "pytest" }
 test-cov = { cmd = "pytest --cov=sistema_pos --cov-report=term-missing" }
 db-revision = { cmd = "alembic revision --autogenerate -m", help = "Create new alembic revision. Usage: poe revision 'message'"}

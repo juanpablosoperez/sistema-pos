@@ -2,17 +2,14 @@ import os
 from logging.config import fileConfig
 
 from dotenv import load_dotenv
-from sqlalchemy import engine_from_config, pool
+from sqlalchemy import engine_from_config
+from sqlalchemy import pool
 
 from alembic import context
 
 # Determina el entorno y carga el archivo .env correspondiente
-environment = os.getenv(
-    "ENVIRONMENT", "development"
-)  # Default to 'development' if not set
-env_file = (
-    f".env.{environment}"  # Use the appropriate .env file based on the environment
-)
+environment = os.getenv("ENVIRONMENT", "development")  # Default to 'development' if not set
+env_file = f".env.{environment}"  # Use the appropriate .env file based on the environment
 load_dotenv(dotenv_path=env_file)  # Cargar el archivo .env correspondiente
 
 # Obtener las variables de entorno
@@ -34,9 +31,7 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 # Importar los modelos aquí para autogenerar las migraciones
-from database.models.base import (  # Ajusta el import según tu estructura de proyecto
-    Base,
-)
+from database.models.base import Base  # Ajusta el import según tu estructura de proyecto
 
 target_metadata = Base.metadata
 

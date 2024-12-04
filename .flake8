@@ -1,18 +1,16 @@
 [flake8]
-max-line-length = 88
+max-line-length = 150
 extend-ignore = E203, W503
 exclude =
-    .git,
-    __pycache__,
-    build,
-    dist,
-    *.pyc,
-    *.egg-info,
-    .eggs
+   .git,
+   __pycache__,
+   build,
+   dist,
+   *.pyc,
+   *.egg-info,
+   .eggs,
+   alembic/versions/*.py
 per-file-ignores =
-    # Ignore import position in alembic env.py
-    alembic/env.py: E402
-    # Ignore F401 (unused imports) in __init__.py files
-    __init__.py: F401
-    # Ignore line length in migrations
-    migrations/*.py: E501
+   alembic/env.py: E402
+   __init__.py: F401
+   migrations/*.py: E501

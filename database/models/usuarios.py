@@ -1,20 +1,30 @@
 # src/app/models/usuarios.py
-from sqlalchemy import Column, Integer, String, Text, Boolean, DateTime, ForeignKey
-from sqlalchemy.orm import relationship
 from datetime import datetime
+
+from sqlalchemy import Boolean
+from sqlalchemy import Column
+from sqlalchemy import DateTime
+from sqlalchemy import ForeignKey
+from sqlalchemy import Integer
+from sqlalchemy import String
+from sqlalchemy import Text
+from sqlalchemy.orm import relationship
+
 from .base import Base
 
+
 class Role(Base):
-    __tablename__ = 'roles'
-    
+    __tablename__ = "roles"
+
     id_rol = Column(Integer, primary_key=True, autoincrement=True)
     nombre = Column(String(50), nullable=False, unique=True)
     descripcion = Column(Text)
     created_at = Column(DateTime, default=datetime.utcnow)
 
+
 class Usuario(Base):
-    __tablename__ = 'usuarios'
-    
+    __tablename__ = "usuarios"
+
     id_usuario = Column(Integer, primary_key=True, autoincrement=True)
     username = Column(String(50), nullable=False, unique=True)
     password = Column(String(255), nullable=False)
@@ -23,7 +33,7 @@ class Usuario(Base):
     telefono = Column(String(50))
     direccion = Column(Text)
     fecha_nacimiento = Column(DateTime)
-    id_rol = Column(Integer, ForeignKey('roles.id_rol'))
+    id_rol = Column(Integer, ForeignKey("roles.id_rol"))
     activo = Column(Boolean, default=True)
     ultimo_acceso = Column(DateTime)
     created_at = Column(DateTime, default=datetime.utcnow)
