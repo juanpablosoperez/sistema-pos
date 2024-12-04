@@ -3,7 +3,8 @@ name = "sistema-pos"
 version = "0.1.0"
 description = "Sistema punto de venta"
 authors = ["tomiban <tbanchio15@gmail.com>"]
-
+readme = "README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -20,9 +21,28 @@ pytest = "*"
 black = "*"
 flake8 = "*"
 isort = "*"
+pre-commit = "*"
+commitizen = "*"
 
-[tool.poetry.scripts]
-start = "src.main:main"
-format = "black:main"
-lint = "flake8:main"
-test = "pytest:main"
+[tool.poe.tasks]
+dev = { cmd = "python main.py", env = { "ENV_NAME" = "development" } }
+prod = { cmd = "python main.py", env = { "ENV_NAME" = "production" } }
+
+format = { sequence = ["_black", "_isort"] }
+_black = { cmd = "black ." }
+_isort = { cmd = "isort ." }
+
+lint = { sequence = ["_flake8"] }
+_flake8 = { cmd = "flake8" }
+
+check = { sequence = ["format", "lint", "test"] }
+test = { cmd = "pytest" }
+test-cov = { cmd = "pytest --cov=sistema_pos --cov-report=term-missing" }
+db-revision = { cmd = "alembic revision --autogenerate -m", help = "Create new alembic revision. Usage: poe revision 'message'"}
+db-migrate = { cmd = "alembic upgrade head" }
+db-rollback = { cmd = "alembic downgrade -1" }
+
+clean = { shell = "rm -rf .pytest_cache .coverage htmlcov __pycache__ dist build" }
+precommit = { cmd = "pre-commit run --all-files" }
+commit = { cmd = "cz commit" }
+version = { cmd = "cz bump" }
