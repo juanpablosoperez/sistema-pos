@@ -5,297 +5,209 @@ Sistema de punto de venta desarrollado con Python, utilizando Flet para la inter
 ## 🚀 Características
 
 - Gestión de inventario
-
 - Sistema de ventas
-
 - Control de compras
-
 - Gestión de proveedores
-
 - Generación de reportes
-
 - Interfaz gráfica moderna
-
 - Base de datos MySQL
 
 ## 🛠️ Requisitos Previos
 
 - Python 3.10+
-
 - MySQL Server
-
 - Poetry (Gestor de dependencias)
-
 - Git
+- pre-commit
 
-## ⚙️ Instalación
+## 🚀 Configuración Inicial
 
-1. Clonar el repositorio
-
-```bash
-
-git clone https://github.com/tu-usuario/punto-venta.git
-
-cd punto-venta
-
-```
-
-2. Instalar Poetry (si no está instalado)
-
-```bash
-
-curl -sSL https://install.python-poetry.org | python3 -
-
-```
-
-3. Instalar dependencias
-
-```bash
-
-poetry install
-
-```
-
-4. Configurar variables de entorno
-
-```bash
-
-cp .env.example .env
-
-# Editar .env con tus configuraciones
-
-```
-
-5. Inicializar base de datos
-
-```bash
-
-poetry run migrate
-
-poetry run seed
-
-```
-
-## 🚀 Uso
-
-### Iniciar la aplicación
-
-```bash
-
-poetry run start
-
-```
-
-### Ejecutar tests
-
-```bash
-
-poetry run test
-
-```
-
-### Formatear código
-
-```bash
-
-poetry run format
-
-```
-
-## Workflow Diario
-
-1. Actualizar rama main:
-
+1. Clonar el repositorio:
    ```bash
-
-   git checkout main
-
-   git pull origin main
-
+   git clone <url-repositorio>
+   cd sistema-pos
    ```
 
-2. Crear rama para nueva feature:
-
+2. Instalar dependencias:
    ```bash
-
-   git checkout -b feature/nombre-feature
-
-   ```
-
-3. Activar entorno virtual:
-
-   ```bash
-
-   poetry shell
-
-   ```
-
-4. Desarrollar con formateo automático:
-
-   ```bash
-
-   # Antes de cada commit
-
-   poetry run black .
-
-   poetry run isort .
-
-   poetry run flake8
-
-   ```
-
-5. Ejecutar tests:
-
-   ```bash
-
-   poetry run pytest
-
-   ```
-
-6. Actualizar dependencias (cuando sea necesario):
-
-   ```bash
-
-   poetry add <paquete>  # Añadir nueva dependencia
-
-   poetry update        # Actualizar todas las dependencias
-
-   ```
-
-## Pull Requests
-
-1. Actualizar rama con main:
-
-   ```bash
-
-   git checkout main
-
-   git pull origin main
-
-   git checkout feature/nombre-feature
-
-   git rebase main
-
-   ```
-
-2. Asegurarse que todo funciona:
-
-   ```bash
-
    poetry install
-
-   poetry run pytest
-
    ```
 
-3. Push y crear PR:
-
+3. Configurar pre-commit:
    ```bash
-
-   git push origin feature/nombre-feature
-
+   poetry run pre-commit install
    ```
 
-## Convenciones de Commit
+4. Configurar variables de entorno:
+   ```bash
+   cp .env.example .env.development
+   cp .env.example .env.production
+   # Editar los archivos con las configuraciones correspondientes
+   ```
 
-Usar commits semánticos con el formato:
+## 💻 Entornos de Desarrollo
+
+### Desarrollo
+```bash
+poetry shell  # Activar entorno virtual
+poetry run dev  # Ejecutar en modo desarrollo
+```
+
+### Producción
+```bash
+poetry run prod  # Ejecutar en modo producción
+```
+
+## 📝 Control de Calidad del Código
+
+### Pre-commit hooks
+
+Los siguientes checks se ejecutan automáticamente antes de cada commit:
+- `black`: Formateador de código
+- `isort`: Ordenamiento de imports
+- `flake8`: Linter de código
+- Checks básicos (espacios en blanco, archivos grandes, etc.)
+
+Para ejecutar los hooks manualmente:
+```bash
+poetry run pre-commit run --all-files
+```
+
+### Sistema de Commits
+
+Usamos Commitizen para mantener un formato consistente en los commits:
 
 ```bash
+# Primero agrega los archivos que quieres commitear
+git add archivo1.py archivo2.py
 
-<usuario>: <tipo>: descripción
-
+# Luego ejecuta el comando de commit interactivo
+poetry run cz commit
 ```
 
-Tipos de commits:
+El comando te guiará paso a paso para crear un commit con el formato correcto:
+1. Seleccionar tipo de cambio
+2. Escribir descripción corta
+3. Agregar descripción larga (opcional)
 
-- feat: Nueva característica
+Tipos de commits disponibles:
+- `feat`: Nueva característica
+- `fix`: Corrección de bug
+- `docs`: Cambios en documentación
+- `style`: Cambios de formato
+- `refactor`: Refactorización de código
+- `test`: Añadir o modificar tests
+- `chore`: Tareas de mantenimiento
 
-- fix: Corrección de bug
+## 🗄️ Base de Datos
 
-- docs: Documentación
-
-- style: Formateo
-
-- refactor: Refactorización
-
-- test: Tests
-
-- chore: Mantenimiento
-
-Ejemplo:
-
+### Migraciones
 ```bash
+# Crear una nueva migración
+alembic revision --autogenerate -m "descripción"
 
-jdoe: feat: añade sistema de autenticación
+# Aplicar migraciones
+alembic upgrade head
 
-```
-
-## 📁 Estructura del Proyecto
-
-```
-
-punto-de-venta/
-
-├── src/
-
-│   ├── app/
-
-│   │   ├── models/
-
-│   │   ├── views/
-
-│   │   └── controllers/
-
-│   ├── config/
-
-│   ├── database/
-
-│   ├── services/
-
-│   └── utils/
-
-├── tests/
-
-├── pyproject.toml
-
-└── README.md
-
+# Revertir última migración
+alembic downgrade -1
 ```
 
 ## 🧪 Testing
-
 ```bash
-
-# Ejecutar todos los tests
-
-poetry run pytest
-
-# Ejecutar tests con coverage
-
-poetry run pytest --cov
-
-# Ejecutar tests específicos
-
-poetry run pytest tests/test_specific.py
-
+poetry run pytest  # Ejecutar todos los tests
+poetry run pytest tests/specific_test.py  # Ejecutar test específico
+poetry run pytest -v  # Modo verbose
 ```
 
 ## 📦 Gestión de Dependencias
 
-### Añadir dependencia
-
 ```bash
+# Añadir dependencia
+poetry add <paquete>  # para producción
+poetry add --group dev <paquete>  # para desarrollo
 
-poetry add <paquete>  # producción
-
-poetry add --group dev <paquete>  # desarrollo
-
-```
-
-### Actualizar dependencias
-
-```bash
-
+# Actualizar dependencias
 poetry update
 
+# Ver dependencias instaladas
+poetry show
 ```
+
+## 📁 Estructura del Proyecto
+```
+sistema-pos/
+├── alembic/            # Migraciones de base de datos
+├── src/                # Código fuente
+│   ├── app/           # Aplicación principal
+│   ├── config/        # Configuraciones
+│   └── utils/         # Utilidades
+├── tests/             # Tests
+├── .env.development   # Variables de entorno desarrollo
+├── .env.production    # Variables de entorno producción
+├── .flake8           # Configuración de flake8
+├── .pre-commit-config.yaml  # Configuración de pre-commit
+├── alembic.ini       # Configuración de alembic
+├── pyproject.toml    # Configuración de poetry
+└── README.md         # Este archivo
+```
+
+## 🤝 Workflow de Desarrollo
+
+1. Crear nueva rama para feature:
+   ```bash
+   git checkout main
+   git pull
+   git checkout -b feature/nombre-feature
+   ```
+
+2. Desarrollar con buenas prácticas:
+   - Escribir tests
+   - Seguir estándares de código
+   - Documentar cambios importantes
+
+3. Hacer commits:
+   ```bash
+   git add <archivos>
+   poetry run cz commit
+   ```
+
+4. Crear Pull Request:
+   - Actualizar rama con main antes de crear PR
+   - Verificar que los tests pasan
+   - Solicitar review
+
+## ⚙️ Configuración de los Entornos
+
+El proyecto utiliza diferentes archivos de entorno:
+- `.env.development`: Configuración para desarrollo local
+- `.env.production`: Configuración para producción
+
+Variables de entorno necesarias:
+```bash
+DB_HOST=localhost
+DB_PORT=3306
+DB_NAME=pos_db
+DB_USER=user
+DB_PASSWORD=password
+```
+
+## 📚 CLI Commands
+
+# Desarrollo
+poetry run poe dev          # Ejecutar en desarrollo
+poetry run poe prod         # Ejecutar en producción
+
+# Formateo y Linteo
+poetry run poe format       # Formatea el codigo y acomoda los imports
+poetry run poe check        # Mismo que anterior pero hace un check del lint
+
+# Git y Migraciones
+poetry run poe commit       # Hacer commit
+poetry run poe db-migrate   # Actualizar migraciones
+poetry run poe db-rollback  # Revertir migración
+poetry run poe db-revision     # Nueva revisión de migración
+poetry run poe version      # Actualizar versión
+
+# Limpieza
+poetry run poe clean        # Limpiar archivos temporales
