@@ -22,6 +22,8 @@ wheels/
 
 # Virtual Environment
 .env
+.env.development
+.env.production
 .venv
 env/
 venv/
