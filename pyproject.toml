@@ -8,13 +8,16 @@ package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.10"
-flet = "*"
+flet = "0.24.*"
 sqlalchemy = "*"
 alembic = "*"
 mysql-connector-python = "*"
 python-dotenv = "*"
 fpdf = "*"
 pandas = "*"
+flet-easy = {extras = ["all"], version = "^0.2.7"}
+peewee = "*"
+
 
 [tool.poetry.group.dev.dependencies]
 pytest = "*"
@@ -50,8 +53,8 @@ max-line-length = 150
 exclude = [".git", "__pycache__", "build", "dist"]
 
 [tool.poe.tasks]
-dev = { cmd = "python main.py", env = { "ENV_NAME" = "development" } }
-prod = { cmd = "python main.py", env = { "ENV_NAME" = "production" } }
+dev = { cmd = "python app/main.py", env = { "ENV_NAME" = "development" } }
+prod = { cmd = "python app/main.py", env = { "ENV_NAME" = "production" } }
 
 format = { sequence = ["_black", "_isort"] }
 _black = { cmd = "black ." }

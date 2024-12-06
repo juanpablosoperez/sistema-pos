@@ -1,4 +1,4 @@
-# src/app/models/usuarios.py
+# app/app/models/usuarios.py
 from datetime import datetime
 
 from sqlalchemy import Boolean
