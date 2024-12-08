@@ -1,3 +1,2 @@
-from controllers.counter import CounterC
-from controllers.login import LoginC
-from controllers.register import RegisterC
+from app.controllers.auth_controller import AuthController
+from app.controllers.user_controller import UserController

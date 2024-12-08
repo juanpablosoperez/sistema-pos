@@ -1,6 +1,5 @@
 import flet as ft
 import flet_easy as fs
-
 from components import Drawer
 
 dashboard = fs.AddPagesy(
