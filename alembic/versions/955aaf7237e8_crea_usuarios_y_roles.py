@@ -1,8 +1,8 @@
-"""productos, codigo barras y categorias
+"""crea  usuarios y roles
 
-Revision ID: 6e4f13a2c1a7
-Revises: c23ff16f5e5f
-Create Date: 2024-12-04 14:22:14.519100
+Revision ID: 955aaf7237e8
+Revises:
+Create Date: 2024-12-08 17:58:57.855904
 
 """
 
@@ -14,8 +14,8 @@ import sqlalchemy as sa
 from alembic import op
 
 # revision identifiers, used by Alembic.
-revision: str = "6e4f13a2c1a7"
-down_revision: Union[str, None] = "c23ff16f5e5f"
+revision: str = "955aaf7237e8"
+down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

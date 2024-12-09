@@ -1,5 +1,8 @@
+# app/core/config.py
 import flet as ft
 import flet_easy as fs
+
+from .theme_config import LightTheme
 
 
 class ConfigApp:
@@ -8,63 +11,51 @@ class ConfigApp:
         self.start()
 
     def start(self):
-        @self.app.login
-        async def login_required(data: ft.Page):
-            # Using Jwt to authenticate user, which has been previously configured with the `data.login()` method.
-            return await fs.decode_async(key_login="login", data=data)
+        self._setup_auth()
+        self._setup_view()
+        self._setup_theme()
+        self._setup_events()
+        self._setup_fullscreen()
 
+    def _setup_fullscreen(self):
+        @self.app.config
+        def page_config(page: ft.Page):
+            page.window_fullscreen = True
+            page.window_maximized = True
+            page.window_frameless = False
+            page.window_resizable = True
+            page.adaptive = True
+            page.window.movable = True
+
+    def _setup_theme(self):
+        @self.app.config
+        def page_config(page: ft.Page):
+            # Configuración del tema
+            page.theme = LightTheme
+            page.theme_mode = ft.ThemeMode.LIGHT
+
+            # Configuración de fuentes
+            page.fonts = {"Roboto": "fonts/Roboto-Regular.ttf", "Lato": "fonts/Lato-Regular.ttf"}
+
+    def _setup_view(self):
         @self.app.view
         async def view_config(data: fs.Datasy):
             return fs.Viewsy(
-                appbar=ft.AppBar(title=ft.Text("Flet-Easy")),
-                drawer=ft.NavigationDrawer(
-                    controls=[
-                        ft.Container(height=12),
-                        ft.Column(
-                            controls=[
-                                ft.Text("Navigation", size=25),
-                                ft.Divider(thickness=2),
-                                ft.FilledButton(
-                                    text="Home",
-                                    on_click=data.go(data.route_init),
-                                ),
-                                ft.FilledButton(
-                                    text="Counter",
-                                    on_click=data.go("/counter/test/10"),
-                                ),
-                                ft.FilledButton(
-                                    text="Share Data",
-                                    on_click=data.go("/share/send-data"),
-                                ),
-                                ft.FilledButton(
-                                    text="Login",
-                                    on_click=data.go("/login"),
-                                ),
-                                ft.FilledButton(
-                                    text="Dashboard",
-                                    on_click=data.go("/dashboard"),
-                                ),
-                                ft.FilledButton("Go back", on_click=data.go_back()),
-                                ft.FilledButton(
-                                    text="Logout",
-                                    on_click=data.logout("login"),
-                                ),
-                            ],
-                            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-                            alignment=ft.MainAxisAlignment.CENTER,
-                        ),
-                    ],
-                ),
+                vertical_alignment=ft.MainAxisAlignment.CENTER,  # Center content vertically
+                horizontal_alignment=ft.CrossAxisAlignment.CENTER,  # Center content horizontally
+                padding=0,  # Optional: set padding to 0 for cleaner alignment
             )
 
-        @self.app.config
-        def page_config(page: ft.Page):
-            theme = ft.Theme()
-            platforms = ["android", "ios", "macos", "linux", "windows"]
-            for platform in platforms:  # Removing animation on route change.
-                setattr(theme.page_transitions, platform, ft.PageTransitionTheme.NONE)
-            page.theme = theme
+    def _setup_auth(self):
+        @self.app.login
+        async def login_required(data: fs.Datasy):
+            try:
+                return await fs.decode_async(key_login="login", data=data)
+            except Exception as e:
+                print(f"Authentication error: {str(e)}")
+                return False
 
+    def _setup_events(self):
         @self.app.config_event_handler
         async def event_handler(data: fs.Datasy):
             page = data.page

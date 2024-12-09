@@ -1,4 +1,5 @@
 import os
+import sys
 from logging.config import fileConfig
 
 from dotenv import load_dotenv
@@ -6,6 +7,8 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 from alembic import context
+
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 # Determina el entorno y carga el archivo .env correspondiente
 environment = os.getenv("ENVIRONMENT", "development")  # Default to 'development' if not set
@@ -31,7 +34,7 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 # Importar los modelos aquí para autogenerar las migraciones
-from database.models.base import Base  # Ajusta el import según tu estructura de proyecto
+from app.models.base import Base  # Ajusta el import según tu estructura de proyecto
 
 target_metadata = Base.metadata
 
