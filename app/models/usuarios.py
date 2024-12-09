@@ -13,6 +13,7 @@ from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
 
 from .base import Base
+from .modulos import usuarios_modulos
 
 
 class Role(Base):
@@ -47,6 +48,7 @@ class Usuario(Base):
     updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
     rol = relationship("Role", back_populates="usuarios")
+    modulos = relationship("Modulo", secondary=usuarios_modulos, back_populates="usuarios")
 
     @property
     def password(self):
@@ -57,10 +59,11 @@ class Usuario(Base):
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
+        if not self.password_hash:
+            return False
         return check_password_hash(self.password_hash, password)
 
     def to_dict(self):
-        """Convierte el usuario a un diccionario para JWT"""
         return {
             "id_usuario": self.id_usuario,
             "username": self.username,
@@ -69,13 +72,13 @@ class Usuario(Base):
             "id_rol": self.id_rol,
             "rol_nombre": self.rol.nombre if self.rol else None,
             "activo": self.activo,
+            "modulos": [modulo.to_dict() for modulo in self.modulos],  # Añadido
         }
 
     @classmethod
     def from_dict(cls, data: dict):
         """Crea una instancia de Usuario desde un diccionario"""
         return cls(
-            id_usuario=data.get("id_usuario"),
             username=data.get("username"),
             nombre=data.get("nombre"),
             email=data.get("email"),

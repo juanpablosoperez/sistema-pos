@@ -1,8 +1,8 @@
-"""crea  usuarios y roles
+"""crea  modulos
 
-Revision ID: 955aaf7237e8
-Revises:
-Create Date: 2024-12-08 17:58:57.855904
+Revision ID: 757271bdc879
+Revises: bc99fab74544
+Create Date: 2024-12-09 01:08:46.228332
 
 """
 
@@ -14,8 +14,8 @@ import sqlalchemy as sa
 from alembic import op
 
 # revision identifiers, used by Alembic.
-revision: str = "955aaf7237e8"
-down_revision: Union[str, None] = None
+revision: str = "757271bdc879"
+down_revision: Union[str, None] = "bc99fab74544"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

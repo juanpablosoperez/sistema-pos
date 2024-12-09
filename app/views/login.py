@@ -80,5 +80,7 @@ class LoginView:
 
     async def handle_submit(self, e):
         if await self.controller.authenticate(self.username.value, self.password.value):
-            # La redirección la maneja el controlador
-            pass
+            print("Autenticación exitosa")
+            # La redirección ahora se maneja en el controlador
+        else:
+            print("Autenticación fallida")

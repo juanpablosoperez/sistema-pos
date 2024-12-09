@@ -2,9 +2,9 @@ import os
 from pathlib import Path
 
 import flet_easy as fs
+from core.config import ConfigApp
+from core.sensitive import SECRET_KEY  # Para algoritmo HS256
 from dotenv import load_dotenv
-
-from app.core.config import ConfigApp
 
 
 def load_environment():
@@ -21,7 +21,12 @@ def load_environment():
 
 def create_app():
     try:
-        app = fs.FletEasy(route_init="/auth/login", route_login="/auth/login", path_views=Path(__file__).parent / "views")
+        app = fs.FletEasy(
+            route_init="/auth/login",
+            route_login="/auth/login",
+            path_views=Path(__file__).parent / "views",
+            secret_key=fs.SecretKey(algorithm=fs.Algorithm.HS256, secret=SECRET_KEY),  # Usa una clave segura
+        )
 
         ConfigApp(app)
         return app
