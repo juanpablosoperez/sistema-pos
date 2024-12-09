@@ -101,12 +101,16 @@ class AuthController:
         return modules
 
     async def authenticate(self, username: str, password: str) -> bool:
+        print("Entra a authenticate")
+
         if not self._validate_credentials(username, password):
+            print("Entra a validate credentials")
             return False
 
         try:
-            user = await self._get_user(username)
-            print("Usuario encontrado:", user is not None)
+            print("Entra a get user")
+            user = self._get_user(username)
+            print("Usuario encontrado:", user)
 
             if not user or not user.check_password(password):
                 self._show_error("Usuario o contraseña incorrectos")
@@ -115,7 +119,7 @@ class AuthController:
             print("Validación de contraseña exitosa")
 
             try:
-                await self._create_session(user)
+                await self._create_session(user)  # Asegúrate de que _create_session sea síncrono
                 return True
             except Exception as e:
                 print(f"Error en la creación de sesión: {str(e)}")
@@ -131,10 +135,16 @@ class AuthController:
         """Logs out the user."""
         await self.data.logout("login")
 
-    async def _get_user(self, username: str) -> Optional[Usuario]:
+    def _get_user(self, username: str) -> Optional[Usuario]:
         """Retrieves the user from the database."""
         with get_db() as db:
-            return db.query(Usuario).filter(Usuario.username == username, Usuario.activo is True).first()
+            print(f"Buscando usuario con username: {username}")
+            user = db.query(Usuario).filter(
+                Usuario.username == username,
+                Usuario.activo.is_(True)
+            ).first()
+            print(f"Resultado de la consulta: {user}")
+            return user
 
     async def _update_last_access(self, user: Usuario) -> None:
         """Updates the user's last access date."""

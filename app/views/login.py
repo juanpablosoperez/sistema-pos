@@ -82,5 +82,8 @@ class LoginView:
         if await self.controller.authenticate(self.username.value, self.password.value):
             print("Autenticación exitosa")
             # La redirección ahora se maneja en el controlador
+            self.page.go("/app/dashboard")  # Cambia la ruta al dashboard después de la autenticación
         else:
             print("Autenticación fallida")
+            self.controller._show_error("Usuario o contraseña incorrectos")  # Manejo de error
+

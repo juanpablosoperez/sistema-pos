@@ -5,6 +5,7 @@ from contextlib import contextmanager
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import Session
 
 environment = os.getenv("ENVIRONMENT", "development")
 env_file = f".env.{environment}"
@@ -69,9 +70,9 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 @contextmanager
-def get_db():
+def get_db() -> Session:
     """
-    Dependency that can be used to get a database session.
+    Dependency that provides a synchronous database session.
     """
     db = SessionLocal()
     try:
