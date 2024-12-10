@@ -3,7 +3,7 @@ import flet_easy as fs
 
 
 async def auth_middleware(data: fs.Datasy):
-    # Rutas públicas que no requieren autenticación
+    print("entre")
     public_routes = [
         "/auth/login",
         "/auth/register",

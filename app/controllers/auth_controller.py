@@ -20,11 +20,15 @@ class AuthController:
     def _get_user(self, username: str):
         with get_db() as db:
             # Cargamos el rol junto con el usuario usando joinedload
-            return db.query(Usuario).options(joinedload(Usuario.rol)).filter(Usuario.username == username, Usuario.activo.is_(True)).first()
+            return (
+                db.query(Usuario)
+                .options(joinedload(Usuario.rol), joinedload(Usuario.modulos))  # Cargamos los módulos
+                .filter(Usuario.username == username)
+                .first()
+            )
 
     def check(self, e):
         username = self.username.c.value if self.username.c.value != "" and self.username.c.value else False
-
         password = self.password.c.value if self.password.c.value != "" and self.password.c.value else False
 
         if username and password:
@@ -39,7 +43,8 @@ class AuthController:
                     session_data = {
                         "id_usuario": user.id_usuario,
                         "username": user.username,
-                        "role": user.rol.nombre if user.rol else "user",  # Valor por defecto si no tiene rol
+                        "role": user.rol.nombre if user.rol else "user",
+                        "modulos": [modulo.to_dict() for modulo in user.modulos],
                     }
 
                     self.data.login(key="login", value=session_data, time_expiry=timedelta(seconds=80000), next_route=self.redirect)
