@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 
+import flet as ft
 import flet_easy as fs
 from core.config import ConfigApp
 from core.sensitive import SECRET_KEY  # Para algoritmo HS256
@@ -24,9 +25,17 @@ def create_app():
         app = fs.FletEasy(
             route_init="/auth/login",
             route_login="/auth/login",
+            auto_logout=True,
             path_views=Path(__file__).parent / "views",
             secret_key=fs.SecretKey(algorithm=fs.Algorithm.HS256, secret=SECRET_KEY),  # Usa una clave segura
         )
+
+        @app.login
+        async def login_check(data: fs.Datasy):
+            session = await data.page.client_storage.get_async("login")
+            if session is not None:
+                return True
+            return False
 
         ConfigApp(app)
         return app
@@ -39,4 +48,4 @@ def create_app():
 if __name__ == "__main__":
     load_environment()
     app = create_app()
-    app.run()
+    app.run(view=ft.AppView.FLET_APP)
