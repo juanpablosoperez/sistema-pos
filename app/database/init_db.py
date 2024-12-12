@@ -48,7 +48,15 @@ def create_default_admin():
                 {"nombre": "dashboard", "descripcion": "Panel principal", "icono": "HOME_OUTLINED", "ruta": "/app/dashboard"},
                 {"nombre": "usuarios", "descripcion": "Gestión de usuarios", "icono": "PEOPLE_OUTLINED", "ruta": "/app/users"},
                 {"nombre": "configuracion", "descripcion": "Configuración", "icono": "SETTINGS_OUTLINED", "ruta": "/app/settings"},
+                {"nombre": "ventas", "descripcion": "Módulo para gestionar las ventas realizadas.", "icono": "SHOPPING_CART", "ruta": "/gestion_ventas"},
+                {"nombre": "gastos", "descripcion": "Módulo para gestionar y registrar los gastos.", "icono": "MONEY_OFF", "ruta": "/gestion_gastos"},
+                {"nombre": "stock", "descripcion": "Módulo para el control y administración del stock de productos.", "icono": "INVENTORY", "ruta": "/gestion_stock"},
+                {"nombre": "precios", "descripcion": "Módulo para configurar y gestionar los precios de los productos.", "icono": "PRICE_CHECK", "ruta": "/gestion_precios"},
+                {"nombre": "caja diaria", "descripcion": "Módulo para realizar el cierre diario de caja y registrar movimientos.", "icono": "POINT_OF_SALE", "ruta": "/cierre_caja"},
+                {"nombre": "clientes crédito", "descripcion": "Módulo para administrar los clientes con compras a crédito.", "icono": "ACCOUNT_BALANCE", "ruta": "/clientes_credito"},
+                {"nombre": "backup", "descripcion": "Módulo para realizar respaldos manuales del sistema.", "icono": "BACKUP", "ruta": "/backup_manual"},
             ]
+
 
             for module_data in admin_modules:
                 module = db.query(Modulo).filter_by(nombre=module_data["nombre"]).first()
