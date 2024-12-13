@@ -32,10 +32,10 @@ class Categoria(Base):
 
     # Use foreign() and remote() to explicitly define the join condition
     imagenes = relationship(
-        Imagen, 
+        "Imagen", 
         primaryjoin="and_(foreign(Categoria.id_categoria) == remote(Imagen.id_entidad), "
                     "Imagen.entidad == 'CATEGORIA')",
-        backref="categoria"
+        viewonly=True  # Añadir este parámetro
     )
 
     # Existing relationship
@@ -64,8 +64,7 @@ class Producto(Base):
     proveedores = relationship("ProductoProveedor", back_populates="producto")
     imagenes = relationship(
         "Imagen", 
-        primaryjoin="and_(Producto.id_producto == Imagen.id_entidad, "
+        primaryjoin="and_(foreign(Producto.id_producto) == remote(Imagen.id_entidad), "
                     "Imagen.entidad == 'PRODUCTO')",
-        foreign_keys=[Imagen.id_entidad],
-        backref="producto"
+        viewonly=True  # Opcional, pero puede ayudar
     )

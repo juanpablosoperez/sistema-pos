@@ -72,7 +72,8 @@ class Movimiento(Base):
         backref="movimientos",
         uselist=False,
         passive_deletes=True,  # No elimina el cliente si se elimina el movimiento
-        lazy='select'  # Carga selectiva cuando se accede
+        lazy='select',
+        overlaps='movimientos'  # Carga selectiva cuando se accede
     )
 
     proveedor = relationship(
@@ -83,7 +84,8 @@ class Movimiento(Base):
         backref="movimientos",
         uselist=False,
         passive_deletes=True,  # No elimina el proveedor si se elimina el movimiento
-        lazy='select'  # Carga selectiva cuando se accede
+        lazy='select',
+        overlaps='movimientos'    # Carga selectiva cuando se accede
     )
 
 

@@ -2,13 +2,12 @@ from sqlalchemy import Column, DateTime, Enum as SQLAlchemyEnum, ForeignKey, Int
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
-from app.models.base import Base
 from app.models.enums import EstadoCaja
 
+from .base import Base
 
 class CajaDiaria(Base):
     __tablename__ = "caja_diaria"
-
     id_caja = Column(Integer, primary_key=True)
     fecha = Column(DateTime, nullable=False)
     hora_apertura = Column(DateTime, nullable=False, default=func.current_timestamp())
