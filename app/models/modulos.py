@@ -11,7 +11,7 @@ from sqlalchemy.orm import relationship
 
 from .base import Base
 
-# Definir la tabla de asociación
+# Tabla de asociación
 usuarios_modulos = Table(
     "usuarios_modulos",
     Base.metadata,
@@ -31,8 +31,24 @@ class Modulo(Base):
     ruta = Column(String(100))
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
-    # La relación con usuarios se define aquí
+    # Relación con usuarios
     usuarios = relationship("Usuario", secondary=usuarios_modulos, back_populates="modulos")
 
+    def __init__(self, nombre: str, icono: str, ruta: str = None, descripcion: str = None):
+        self.nombre = nombre
+        self.icono = icono
+        self.ruta = ruta
+        self.descripcion = descripcion
+
     def to_dict(self):
-        return {"id_modulo": self.id_modulo, "nombre": self.nombre, "descripcion": self.descripcion, "icono": self.icono, "ruta": self.ruta}
+        return {
+            "id_modulo": self.id_modulo,
+            "nombre": self.nombre,
+            "icono": self.icono,
+            "ruta": self.ruta,
+            "descripcion": self.descripcion,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+        }
+
+    def __repr__(self):
+        return f"<Modulo {self.nombre}>"

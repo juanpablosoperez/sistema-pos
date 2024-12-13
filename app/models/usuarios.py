@@ -9,6 +9,7 @@ from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy import Text
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
 
@@ -19,36 +20,37 @@ from .modulos import usuarios_modulos
 class Role(Base):
     __tablename__ = "roles"
 
-    id_rol = Column(Integer, primary_key=True, autoincrement=True)
-    nombre = Column(String(50), nullable=False, unique=True)
+    id_rol = Column(Integer, primary_key=True)
+    nombre = Column(String(50), unique=True, nullable=False)
     descripcion = Column(Text)
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    activo = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=func.current_timestamp())
 
-    usuarios = relationship("Usuario", back_populates="rol", lazy="dynamic")
-
-    def __repr__(self):
-        return f"<Role {self.nombre}>"
+    # Relaciones
+    usuarios = relationship("Usuario", back_populates="rol")
 
 
 class Usuario(Base):
     __tablename__ = "usuarios"
 
-    id_usuario = Column(Integer, primary_key=True, autoincrement=True)
-    username = Column(String(50), nullable=False, unique=True)
+    id_usuario = Column(Integer, primary_key=True)
+    username = Column(String(50), unique=True, nullable=False)
     password_hash = Column("password", String(255), nullable=False)
     nombre = Column(String(100), nullable=False)
     email = Column(String(100), unique=True)
-    telefono = Column(String(50))
-    direccion = Column(Text)
-    fecha_nacimiento = Column(DateTime)
-    id_rol = Column(Integer, ForeignKey("roles.id_rol", ondelete="SET NULL"))
+    id_rol = Column(Integer, ForeignKey("roles.id_rol"))
     activo = Column(Boolean, default=True)
     ultimo_acceso = Column(DateTime)
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
-    updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+    created_at = Column(DateTime, default=func.current_timestamp())
+    updated_at = Column(DateTime, default=func.current_timestamp(), onupdate=func.current_timestamp())
 
+    # Relaciones
     rol = relationship("Role", back_populates="usuarios")
     modulos = relationship("Modulo", secondary=usuarios_modulos, back_populates="usuarios")
+    movimientos = relationship("Movimiento", back_populates="usuario")
+    # Relaciones con caja_diaria
+    cajas_apertura = relationship("CajaDiaria", foreign_keys="CajaDiaria.id_usuario_apertura", back_populates="usuario_apertura")
+    cajas_cierre = relationship("CajaDiaria", foreign_keys="CajaDiaria.id_usuario_cierre", back_populates="usuario_cierre")
 
     @property
     def password(self):

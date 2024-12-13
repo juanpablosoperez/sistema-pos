@@ -14,6 +14,7 @@ def load_environment():
         root_dir = Path(__file__).parent
         load_dotenv(root_dir / ".env")
         load_dotenv(root_dir / f".env.{env_name}", override=True)
+
         print(f"Ambiente cargado: {env_name}")
     except Exception as e:
         print(f"Error cargando el ambiente: {str(e)}")
