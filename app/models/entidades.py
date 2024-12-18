@@ -25,6 +25,8 @@ class Cliente(Base):
     created_at = Column(DateTime, default=func.current_timestamp())
     updated_at = Column(DateTime, default=func.current_timestamp(), onupdate=func.current_timestamp())
 
+    ventas = relationship("Venta", back_populates="cliente")
+
     def __repr__(self):
         return f"<Cliente(nombre={self.nombre})>"
 
@@ -37,31 +39,15 @@ class Proveedor(Base):
     dni = Column(String(20), unique=True)
     telefono = Column(String(50))
     email = Column(String(100))
+    es_frecuente = Column(Boolean)
     activo = Column(Boolean, default=True)
     created_at = Column(DateTime, default=func.current_timestamp())
     updated_at = Column(DateTime, default=func.current_timestamp(), onupdate=func.current_timestamp())
 
-    # Relación con productos
-    productos = relationship("ProductoProveedor", back_populates="proveedor")
+
+    compras = relationship("EgresoCompra", back_populates="proveedor")
 
     def __repr__(self):
         return f"<Proveedor(nombre={self.nombre})>"
 
 
-class ProductoProveedor(Base):
-    __tablename__ = "productos_proveedores"
-
-    id_producto = Column(Integer, ForeignKey("productos.id_producto"), primary_key=True)
-    id_proveedor = Column(Integer, ForeignKey("proveedores.id_proveedor"), primary_key=True)
-    es_proveedor_principal = Column(Boolean, default=False)
-    ultimo_precio = Column(Numeric(12, 2))
-    activo = Column(Boolean, default=True)
-    created_at = Column(DateTime, default=func.current_timestamp())
-    updated_at = Column(DateTime, default=func.current_timestamp(), onupdate=func.current_timestamp())
-
-    # Relaciones
-    producto = relationship("Producto", back_populates="proveedores")
-    proveedor = relationship("Proveedor", back_populates="productos")
-
-    def __repr__(self):
-        return f"<ProductoProveedor(producto_id={self.id_producto}, proveedor_id={self.id_proveedor})>"

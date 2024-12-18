@@ -4,7 +4,7 @@ import flet_easy as fs
 from app.components.appbar import AppBar
 from app.components.sidebar import SideNav
 from app.database.connection import get_db
-from app.models.modulos import Modulo
+from app.models.usuarios import Modulo
 from app.models.usuarios import Usuario
 
 dashboard = fs.AddPagesy(

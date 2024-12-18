@@ -1,26 +1,10 @@
-
-
-
-
 # app/models/enums.py
 from enum import Enum
-
-
-
-
-class TipoComprobante(Enum):
-    FACTURA = "FACTURA"
-    BOLETA = "BOLETA"
-    NOTA_CREDITO = "NOTA_CREDITO"
-    RECIBO = "RECIBO"
-    INTERNO = "INTERNO"
-
 
 class TipoEntidad(Enum):
     CLIENTE = "CLIENTE"
     PROVEEDOR = "PROVEEDOR"
     PUBLICO_GENERAL = "PUBLICO_GENERAL"
-
 
 class EstadoMovimiento(Enum):
     PENDIENTE = "PENDIENTE"
@@ -34,12 +18,12 @@ class FormaPago(Enum):
     TRANSFERENCIA = "TRANSFERENCIA"
     CREDITO = "CREDITO"
 
-
-class Naturaleza(Enum):
-    ENTRADA = "ENTRADA"
-    SALIDA = "SALIDA"
-
-
 class EstadoCaja(Enum):
     ABIERTO = "A"
     CERRADO = "C"
+
+class TipoEgreso(Enum):
+    COMPRA = "COMPRA"
+    SERVICIO = "SERVICIO"
+    SUELDO = "SUELDO"
+    GEO = "GEO"  # Gastos extraordinarios

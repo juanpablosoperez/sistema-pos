@@ -2,7 +2,7 @@ from datetime import datetime
 from datetime import timezone
 
 from app.database.connection import get_db
-from app.models.modulos import Modulo
+from app.models.usuarios import Modulo
 from app.models.usuarios import Role
 from app.models.usuarios import Usuario
 

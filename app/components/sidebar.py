@@ -4,7 +4,7 @@ from typing import List
 
 import flet as ft
 
-from app.models.modulos import Modulo
+from app.models.usuarios import Modulo
 
 
 class SideNav(ft.NavigationRail):

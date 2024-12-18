@@ -30,7 +30,8 @@ class CajaDiaria(Base):
     # Relaciones
     usuario_apertura = relationship("Usuario", foreign_keys=[id_usuario_apertura])
     usuario_cierre = relationship("Usuario", foreign_keys=[id_usuario_cierre])
-    movimientos = relationship("Movimiento", back_populates="caja_diaria")
+    ventas = relationship("Venta", back_populates="caja_diaria")
+    egresos = relationship("Egreso", back_populates="caja_diaria")
 
     def __repr__(self):
         return f"<CajaDiaria fecha={self.fecha}, estado={self.estado.value}>"
