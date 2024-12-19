@@ -1,6 +1,6 @@
 import flet as ft
 import flet_easy as fs
-from controllers.auth_controller import AuthController
+from app.controllers.auth_controller import AuthController
 
 
 class LoginForm(ft.Container):
