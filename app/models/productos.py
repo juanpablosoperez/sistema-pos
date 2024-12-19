@@ -9,15 +9,14 @@ from sqlalchemy import Text
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
-
 from .base import Base
 
 
 class CodigoBarras(Base):
-    __tablename__ = 'codigo_barras'
+    __tablename__ = "codigo_barras"
 
     id_codigo_barras = Column(Integer, primary_key=True, autoincrement=True)
-    id_producto = Column(Integer, ForeignKey('productos.id_producto'), nullable=False)
+    id_producto = Column(Integer, ForeignKey("productos.id_producto"), nullable=False)
     codigo = Column(String(100), nullable=False, unique=True)
     activo = Column(Boolean, default=True)
     created_at = Column(DateTime, default=func.current_timestamp())
@@ -25,11 +24,12 @@ class CodigoBarras(Base):
     # Relaciones
     producto = relationship("Producto", back_populates="codigos_barra")
 
+
 class Imagen(Base):
-    __tablename__ = 'imagenes'
+    __tablename__ = "imagenes"
 
     id_imagen = Column(Integer, primary_key=True, autoincrement=True)
-    id_producto = Column(Integer, ForeignKey('productos.id_producto', ondelete='CASCADE'))
+    id_producto = Column(Integer, ForeignKey("productos.id_producto", ondelete="CASCADE"))
     nombre = Column(String(100))
     tipo = Column(String(50))
     orden = Column(Integer, default=0)
@@ -38,6 +38,7 @@ class Imagen(Base):
 
     # Relaciones
     producto = relationship("Producto", back_populates="imagenes")
+
 
 class Categoria(Base):
     __tablename__ = "categorias"
@@ -52,15 +53,17 @@ class Categoria(Base):
     # Relaciones
     productos = relationship("Producto", back_populates="categoria")
 
+
 class Unidad(Base):
-    __tablename__ = 'unidades'
-    
+    __tablename__ = "unidades"
+
     id_unidad = Column(Integer, primary_key=True, autoincrement=True)
     nombre = Column(String(200), nullable=False)
     abreviatura = Column(String(200), nullable=False)
 
     # Relaciones
     productos = relationship("Producto", back_populates="unidad")
+
 
 class Producto(Base):
     __tablename__ = "productos"
@@ -86,4 +89,3 @@ class Producto(Base):
     codigos_barra = relationship("CodigoBarras", back_populates="producto")
     items_venta = relationship("ItemVenta", back_populates="producto")
     items_compra = relationship("EgresoCompraItem", back_populates="producto")
-    

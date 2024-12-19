@@ -1,10 +1,17 @@
-from sqlalchemy import Column, DateTime, Enum as SQLAlchemyEnum, ForeignKey, Integer, Numeric, Text
+from sqlalchemy import Column
+from sqlalchemy import DateTime
+from sqlalchemy import Enum as SQLAlchemyEnum
+from sqlalchemy import ForeignKey
+from sqlalchemy import Integer
+from sqlalchemy import Numeric
+from sqlalchemy import Text
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
 from app.models.enums import EstadoCaja
 
 from .base import Base
+
 
 class CajaDiaria(Base):
     __tablename__ = "caja_diaria"

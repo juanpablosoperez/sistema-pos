@@ -2,7 +2,6 @@
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import DateTime
-from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import Numeric
 from sqlalchemy import String
@@ -44,10 +43,7 @@ class Proveedor(Base):
     created_at = Column(DateTime, default=func.current_timestamp())
     updated_at = Column(DateTime, default=func.current_timestamp(), onupdate=func.current_timestamp())
 
-
     compras = relationship("EgresoCompra", back_populates="proveedor")
 
     def __repr__(self):
         return f"<Proveedor(nombre={self.nombre})>"
-
-

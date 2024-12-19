@@ -1,28 +1,19 @@
-from datetime import datetime
-from datetime import timezone
-
-from sqlalchemy import Boolean, Table
-from sqlalchemy import Column
-from sqlalchemy import DateTime
-from sqlalchemy import ForeignKey
-from sqlalchemy import Integer
-from sqlalchemy import String
-from sqlalchemy import Text
+from datetime import datetime, timezone
+from sqlalchemy import Boolean, Table, Column, DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-from werkzeug.security import check_password_hash
-from werkzeug.security import generate_password_hash
+from sqlalchemy.ext.declarative import declarative_base
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from .base import Base
 
-# Tabla de asociación
-usuarios_modulos = Table(
-    "usuarios_modulos",
+# Tabla de asociación para roles y módulos
+roles_modulos = Table(
+    'roles_modulos',
     Base.metadata,
-    Column("id_usuario", ForeignKey("usuarios.id_usuario"), primary_key=True),
-    Column("id_modulo", ForeignKey("modulos.id_modulo"), primary_key=True)
+    Column('id_rol', Integer, ForeignKey('roles.id_rol'), primary_key=True),
+    Column('id_modulo', Integer, ForeignKey('modulos.id_modulo'), primary_key=True)
 )
-
 
 class Modulo(Base):
     __tablename__ = "modulos"
@@ -32,10 +23,12 @@ class Modulo(Base):
     descripcion = Column(String(255))
     icono = Column(String(50))
     ruta = Column(String(100))
+    orden = Column(Integer)
+    activo = Column(Boolean, default=True)
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
-    # Relación con usuarios
-    usuarios = relationship("Usuario", secondary=usuarios_modulos, back_populates="modulos")
+    # Relaciones
+    roles = relationship("Role", secondary=roles_modulos, back_populates="modulos")
 
     def __init__(self, nombre: str, icono: str, ruta: str = None, descripcion: str = None):
         self.nombre = nombre
@@ -56,7 +49,6 @@ class Modulo(Base):
     def __repr__(self):
         return f"<Modulo {self.nombre}>"
 
-
 class Role(Base):
     __tablename__ = "roles"
 
@@ -68,7 +60,7 @@ class Role(Base):
 
     # Relaciones
     usuarios = relationship("Usuario", back_populates="rol")
-
+    modulos = relationship("Modulo", secondary=roles_modulos, back_populates="roles")
 
 class Usuario(Base):
     __tablename__ = "usuarios"
@@ -86,7 +78,6 @@ class Usuario(Base):
 
     # Relaciones
     rol = relationship("Role", back_populates="usuarios")
-    modulos = relationship("Modulo", secondary=usuarios_modulos, back_populates="usuarios")
     ventas = relationship("Venta", back_populates="usuario")
     egresos = relationship("Egreso", back_populates="usuario")
     cajas_apertura = relationship("CajaDiaria", foreign_keys="[CajaDiaria.id_usuario_apertura]", back_populates="usuario_apertura")
@@ -114,7 +105,8 @@ class Usuario(Base):
             "id_rol": self.id_rol,
             "rol_nombre": self.rol.nombre if self.rol else None,
             "activo": self.activo,
-            "modulos": [modulo.to_dict() for modulo in self.modulos],  # Añadido
+            # Ahora obtenemos los módulos a través del rol
+            "modulos": [modulo.to_dict() for modulo in self.rol.modulos] if self.rol else [],
         }
 
     @classmethod
