@@ -3,8 +3,8 @@ from pathlib import Path
 
 import flet as ft
 import flet_easy as fs
-from core.config import ConfigApp
-from core.sensitive import SECRET_KEY  # Para algoritmo HS256
+from .core.config import ConfigApp
+from .core.sensitive import SECRET_KEY  # Para algoritmo HS256
 from dotenv import load_dotenv
 
 

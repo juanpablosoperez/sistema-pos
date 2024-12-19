@@ -3,8 +3,8 @@ from datetime import timedelta
 
 import flet as ft
 import flet_easy as fs
-from database.connection import get_db
-from models.usuarios import Usuario
+from app.database.connection import get_db
+from app.models.usuarios import Usuario
 
 # controllers/auth_controller.py
 from sqlalchemy.orm import joinedload

@@ -1,6 +1,6 @@
 import flet as ft
 import flet_easy as fs
-from components.login import LoginForm
+from app.components.login import LoginForm
 
 
 @fs.page(route="/auth/login", title="Login")

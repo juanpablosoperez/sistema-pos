@@ -1,7 +1,7 @@
 # app/views/register_view.py
 import flet as ft
 import flet_easy as fs
-from controllers.auth_controller import AuthController
+from app.controllers.auth_controller import AuthController
 
 auth = fs.AddPagesy(route_prefix="/auth")
 
